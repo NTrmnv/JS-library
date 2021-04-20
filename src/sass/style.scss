@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button{
+    height: 50px;
+    width: 140px;
+    background-color: pink;
+    text-align: center;
+}
+
+.active{
+    font-size: 20px;
+    color: green;
+}
