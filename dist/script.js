@@ -123,13 +123,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
 
 
-_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.modal = function () {
-  let scroll = calcScroll();
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.moveX = function (move) {
+  for (let i = 0; i < this.length; i++) {
+    if (!move) {
+      this[i].style.transform = '';
+    } else {
+      this[i].style.transform = `TranslateX(${move}px)`;
+    }
+  }
+};
 
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.modal = function () {
   for (let i = 0; i < this.length; i++) {
     const target = this[i].getAttribute('data-target');
     Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).click(e => {
       e.preventDefault();
+
+      if (document.body.offsetHeight > document.documentElement.clientHeight) {
+        document.body.style.marginRight = `${calcScroll()}px`;
+        Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.modal').moveX(-calcScroll() / 2);
+      }
+
       Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeIn(500);
       document.body.style.overflow = "hidden";
     });
@@ -140,14 +154,30 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.modal = function () {
     Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(elem).click(() => {
       Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.modal').fadeOut(500);
       document.body.style.overflow = "";
+      document.body.style.marginRight = 0;
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.modal').moveX();
     });
   });
   Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.modal').click(e => {
     if (e.target.classList.contains('modal')) {
       Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.modal').fadeOut(500);
       document.body.style.overflow = "";
+      document.body.style.marginRight = 0;
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.modal').moveX();
     }
   });
+
+  function calcScroll() {
+    let div = document.createElement('div');
+    div.style.width = '50px';
+    div.style.height = '50px';
+    div.style.overflowY = 'scroll';
+    div.style.visibility = 'hidden';
+    document.body.appendChild(div);
+    let scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+    return scrollWidth;
+  }
 };
 
 Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('[data-toggle="modal"]').modal();
